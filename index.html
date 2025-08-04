@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Santino3D - Tienda de Impresiones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #333; }
+    form, .product { background: white; padding: 20px; margin: 20px auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; }
+    input, textarea, button { width: 100%; margin: 10px 0; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    .product-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .product { width: 300px; }
+    .product img { width: 100%; border-radius: 6px; }
+    .interested { background: #2196f3; color: white; border: none; cursor: pointer; }
+    #interestForm { display: none; }
+  </style>
+</head>
+<body>
+
+<h1>Santino3D - Tus Impresiones en Venta</h1>
+
+<form id="uploadForm">
+  <h3>Subir nuevo producto</h3>
+  <input type="text" id="name" placeholder="Nombre del producto" required>
+  <input type="text" id="price" placeholder="Precio (en ARS)" required>
+  <textarea id="desc" placeholder="Descripción" required></textarea>
+  <input type="url" id="image" placeholder="URL de la imagen" required>
+  <button type="submit">Agregar producto</button>
+</form>
+
+<section class="product-list" id="productList"></section>
+
+<form id="interestForm">
+  <h3>Formulario de interés</h3>
+  <input type="text" id="userName" placeholder="Tu nombre" required>
+  <input type="email" id="userEmail" placeholder="Tu email" required>
+  <input type="tel" id="userPhone" placeholder="Tu teléfono" required>
+  <button type="submit">Enviar interés</button>
+</form>
+
+<script>
+  const form = document.getElementById('uploadForm');
+  const productList = document.getElementById('productList');
+  const interestForm = document.getElementById('interestForm');
+  let currentProduct = null;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const desc = document.getElementById('desc').value;
+    const image = document.getElementById('image').value;
+
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${image}" alt="${name}">
+      <h3>${name}</h3>
+      <p><strong>Precio:</strong> $${price}</p>
+      <p>${desc}</p>
+      <button class="interested">Estoy interesado</button>
+    `;
+    div.querySelector('.interested').onclick = () => {
+      currentProduct = name;
+      interestForm.style.display = 'block';
+      window.scrollTo({ top: interestForm.offsetTop, behavior: 'smooth' });
+    };
+    productList.appendChild(div);
+    form.reset();
+  });
+
+  interestForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('userName').value;
+    const email = document.getElementById('userEmail').value;
+    const phone = document.getElementById('userPhone').value;
+    alert(`Nuevo interesado en ${currentProduct}:
+Nombre: ${name}
+Email: ${email}
+Teléfono: ${phone}`);
+    interestForm.reset();
+    interestForm.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
